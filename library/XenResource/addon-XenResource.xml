@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.0 Release Candidate 1" version_id="1010051" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
+<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.0" version_id="1010070" url="http://xenforo.com" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
   <admin_navigation>
     <navigation navigation_id="resourceCategories" parent_navigation_id="resources" display_order="1" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
     <navigation navigation_id="resourceCategoryPerms" parent_navigation_id="permissions" display_order="21" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
@@ -1563,7 +1563,7 @@ step=128</edit_format_params>
     <phrase title="deselect_resources" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Deselect resources]]></phrase>
     <phrase title="disable_sub_category_notifications" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Disable sub-category notifications]]></phrase>
     <phrase title="discussion" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Discussion]]></phrase>
-    <phrase title="discuss_this_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Discuss this Resource]]></phrase>
+    <phrase title="discuss_this_resource" version_id="1010070" version_string="1.1.0"><![CDATA[Discuss This Resource]]></phrase>
     <phrase title="does_not_have_file" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Does not have a file]]></phrase>
     <phrase title="download" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Download]]></phrase>
     <phrase title="downloads" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Downloads]]></phrase>
@@ -1737,7 +1737,7 @@ step=128</edit_format_params>
     <phrase title="provide_n_depth_description_resource" version_id="1000170" version_string="1.0.1"><![CDATA[Provide a more in-depth description of your resource, including its feature highlights and any other important information. You should also include installation instructions in this area, if any are required.]]></phrase>
     <phrase title="provide_very_brief_one_line_description_of_your_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Provide a very brief, one-line description of your resource.]]></phrase>
     <phrase title="purchase_url" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Purchase URL]]></phrase>
-    <phrase title="rate_this_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Rate this Resource]]></phrase>
+    <phrase title="rate_this_resource" version_id="1010070" version_string="1.1.0"><![CDATA[Rate This Resource]]></phrase>
     <phrase title="rating_anonymous" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Anonymous]]></phrase>
     <phrase title="read_all_x_reviews" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Read all {count} reviews]]></phrase>
     <phrase title="read_all_x_updates" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Read all {count} updates]]></phrase>
@@ -1821,7 +1821,7 @@ step=128</edit_format_params>
     <phrase title="someone_replies_to_your_resource_review" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Someone replies to your resource review]]></phrase>
     <phrase title="someone_reviews_one_of_your_resources" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Someone reviews one of your resources]]></phrase>
     <phrase title="stop_watching_categories" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Stop watching categories]]></phrase>
-    <phrase title="stop_watching_this_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Stop Watching this Resource]]></phrase>
+    <phrase title="stop_watching_this_resource" version_id="1010070" version_string="1.1.0"><![CDATA[Stop Watching This Resource]]></phrase>
     <phrase title="submit_review_anonymously" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Submit review anonymously]]></phrase>
     <phrase title="sub_categories" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Sub-categories]]></phrase>
     <phrase title="tag_line" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Tag Line]]></phrase>
@@ -1848,7 +1848,7 @@ step=128</edit_format_params>
     <phrase title="unfeature_resources" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Unfeature Resources]]></phrase>
     <phrase title="unlike_resource_update" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Unlike Resource Update]]></phrase>
     <phrase title="unwatch_category" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Unwatch Category]]></phrase>
-    <phrase title="unwatch_this_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Unwatch this Resource]]></phrase>
+    <phrase title="unwatch_this_resource" version_id="1010070" version_string="1.1.0"><![CDATA[Unwatch This Resource]]></phrase>
     <phrase title="updated" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Updated]]></phrase>
     <phrase title="updated_resource_file" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Updated Resource File]]></phrase>
     <phrase title="updates" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Updates]]></phrase>
@@ -1871,7 +1871,7 @@ step=128</edit_format_params>
     <phrase title="viewing_resource_author" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Viewing resource author]]></phrase>
     <phrase title="view_all" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[View All]]></phrase>
     <phrase title="view_older_updates" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[View older updates]]></phrase>
-    <phrase title="view_this_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[View this Resource]]></phrase>
+    <phrase title="view_this_resource" version_id="1010070" version_string="1.1.0"><![CDATA[View This Resource]]></phrase>
     <phrase title="votes" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[votes]]></phrase>
     <phrase title="watched_categories" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Watched Categories]]></phrase>
     <phrase title="watched_resources" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Watched Resources]]></phrase>
@@ -2023,7 +2023,7 @@ To disable all emails:
 {board_link}]]></phrase>
     <phrase title="watch_category" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Watch Category]]></phrase>
     <phrase title="watch_resource_button" version_id="1000170" version_string="1.0.1"><![CDATA[Watch Resource]]></phrase>
-    <phrase title="watch_this_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Watch this Resource]]></phrase>
+    <phrase title="watch_this_resource" version_id="1010070" version_string="1.1.0"><![CDATA[Watch This Resource]]></phrase>
     <phrase title="watch_this_resource_sentence" version_id="1000170" version_string="1.0.1"><![CDATA[Watch this resource]]></phrase>
     <phrase title="whenever_resource_category_created_thread_posted" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[If selected, whenever a resource in this category is created, a thread will be posted in this forum.]]></phrase>
     <phrase title="x_created_resource_y" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[{name} created the resource {title}.]]></phrase>
