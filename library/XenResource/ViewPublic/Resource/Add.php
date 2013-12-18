@@ -9,6 +9,7 @@ class XenResource_ViewPublic_Resource_Add extends XenForo_ViewPublic_Base
 		$this->_params['editorTemplate'] = XenForo_ViewPublic_Helper_Editor::getEditorTemplate(
 			$this, 'message', $message,
 			array(
+				'extraClass' => 'NoAutoComplete',
 				'autoSaveUrl' =>
 					empty($this->_params['resource']['resource_id'])
 					? XenForo_Link::buildPublicLink('resources/categories/save-draft', $this->_params['category'])
@@ -27,7 +28,7 @@ class XenResource_ViewPublic_Resource_Add extends XenForo_ViewPublic_Base
 						isset($field['field_value']) ? $field['field_value'] : '',
 						array(
 							'height' => '100px',
-							'extraClass' => 'NoAttachment'
+							'extraClass' => 'NoAttachment NoAutoComplete'
 						)
 					);
 				}

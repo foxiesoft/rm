@@ -661,6 +661,9 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 		$this->getModelFromCache('XenForo_Model_ModerationQueue')->deleteFromModerationQueue(
 			'resource', $this->get('resource_id')
 		);
+
+		$filePath = $this->_getResourceModel()->getResourceIconFilePath($this->get('resource_id'));
+		@unlink($filePath);
 	}
 
 	protected function _getThreadTitle()

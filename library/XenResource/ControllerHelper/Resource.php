@@ -169,6 +169,12 @@ class XenResource_ControllerHelper_Resource extends XenForo_ControllerHelper_Abs
 		array $resourceFetchOptions = array(), array $categoryFetchOptions = array()
 	)
 	{
+		if (!isset($ratingFetchOptions['join']))
+		{
+			$ratingFetchOptions['join'] = 0;
+		}
+		$ratingFetchOptions['join'] |= XenResource_Model_Rating::FETCH_USER;
+
 		$rating = $this->getReviewOrError($reviewId, $ratingFetchOptions);
 		list($resource, $category) = $this->assertResourceValidAndViewable(
 			$rating['resource_id'], $resourceFetchOptions, $categoryFetchOptions

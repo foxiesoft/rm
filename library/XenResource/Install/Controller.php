@@ -43,7 +43,7 @@ class XenResource_Install_Controller
 		else
 		{
 			// upgrades
-			if ($previous['version_id'] < 1020031)
+			if ($previous['version_id'] < 1010031)
 			{
 				// upgrading from 1.0
 				try
@@ -164,6 +164,19 @@ class XenResource_Install_Controller
 							ADD prefix_cache MEDIUMBLOB NOT NULL COMMENT 'Serialized data from xf_resource_category_prefix, [group_id][prefix_id] => prefix_id',
 							ADD require_prefix TINYINT UNSIGNED NOT NULL DEFAULT '0',
 							ADD featured_count SMALLINT UNSIGNED NOT NULL DEFAULT '0'
+					");
+				}
+				catch (Zend_Db_Exception $e) {}
+			}
+
+			// this is a bug in the schema only if you installed 1.1.0
+			if ($previous['version_id'] == 1010031)
+			{
+				try
+				{
+					$db->query("
+						ALTER TABLE xf_resource_field
+							CHANGE display_group display_group VARCHAR(25) NOT NULL DEFAULT 'above_info'
 					");
 				}
 				catch (Zend_Db_Exception $e) {}
@@ -393,7 +406,7 @@ class XenResource_Install_Controller
 		$tables['xf_resource_field'] = "
 			CREATE TABLE IF NOT EXISTS `xf_resource_field` (
 			  	field_id VARBINARY(25) NOT NULL,
-				display_group VARCHAR(25) NOT NULL DEFAULT 'info_start',
+				display_group VARCHAR(25) NOT NULL DEFAULT 'above_info',
 				display_order INT UNSIGNED NOT NULL DEFAULT 1,
 				field_type VARCHAR(25) NOT NULL DEFAULT 'textbox',
 				field_choices BLOB NOT NULL,
@@ -621,7 +634,7 @@ class XenResource_Install_Controller
 			self::applyGlobalPermission('resource', 'approveUnapprove', 'forum', 'approveUnapprove', true);
 		}
 
-		if (!$previousVersion || $previousVersion < 1020031)
+		if (!$previousVersion || $previousVersion < 1010031)
 		{
 			self::applyGlobalPermission('resource', 'featureUnfeature', 'forum', 'stickUnstickThread', true);
 			self::applyGlobalPermission('resource', 'warn', 'forum', 'warn', true);

@@ -94,7 +94,7 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 			$featuredResources = $resourceModel->getFeaturedResourcesInCategories($criteria['resource_category_id'],
 				array_merge(
 					$this->_getResourceListFetchOptions(),
-					array('limit' => 4, 'order' => 'random')
+					array('limit' => 6, 'order' => 'random')
 				)
 			);
 			$featuredResources = $this->_getResourceModel()->filterUnviewableResources($featuredResources);
@@ -151,6 +151,7 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 
 		$viewParams = array(
 			'categories' => $categoryModel->prepareCategories($categories),
+			'showFilterTabs' => $this->_displayFilterOptions($viewableCategories, array_keys($viewableCategories)),
 			'resources' => $resources,
 			'totalResources' => $totalResources,
 			'featuredResources' => $featuredResources,
@@ -216,17 +217,34 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 
 	public function actionFilterMenu()
 	{
+		$categoryModel = $this->_getCategoryModel();
+		$viewableCategories = $categoryModel->getViewableCategories();
+
 		$categoryId = $this->_input->filterSingle('resource_category_id', XenForo_Input::UINT);
 		if ($categoryId)
 		{
 			$category = $this->_getResourceHelper()->assertCategoryValidAndViewable();
-			$categoryIds = $this->_getCategoryModel()->getDescendantsOfCategory($category);
-			$categoryIds[] = $categoryId;
+
+			$categoryList = $categoryModel->groupCategoriesByParent($viewableCategories);
+
+			$childCategories = (isset($categoryList[$category['resource_category_id']])
+				? $categoryList[$category['resource_category_id']]
+				: array()
+			);
+			if ($childCategories)
+			{
+				$searchCategoryIds = $categoryModel->getDescendantCategoryIdsFromGrouped($categoryList, $category['resource_category_id']);
+				$searchCategoryIds[] = $category['resource_category_id'];
+			}
+			else
+			{
+				$searchCategoryIds = array($category['resource_category_id']);
+			}
 		}
 		else
 		{
 			$category = null;
-			$categoryIds = null;
+			$searchCategoryIds = array_keys($viewableCategories);
 		}
 
 		$params = $this->_input->filterSingle('params', XenForo_Input::ARRAY_SIMPLE);
@@ -238,7 +256,7 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 		$prefixesGrouped = $prefixModel->getPrefixesByGroups();
 		if ($prefixesGrouped)
 		{
-			$visiblePrefixes = $prefixModel->getVisiblePrefixIds(null, $categoryIds);
+			$visiblePrefixes = $prefixModel->getVisiblePrefixIds(null, $searchCategoryIds);
 			foreach ($prefixesGrouped AS $key => $prefixes)
 			{
 				foreach ($prefixes AS $prefixId => $prefix)
@@ -256,13 +274,22 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 			}
 		}
 
-		if ($category)
+		$showPriceFilters = false;
+
+		if (XenForo_Application::getOptions()->resourceShowFilterTabs)
 		{
-			$showPriceFilters = (($category['rgt'] - $category['lft'] > 0) || $category['allow_commercial_external']);
-		}
-		else
-		{
-			$showPriceFilters = true;
+			foreach ($searchCategoryIds AS $searchCategoryId)
+			{
+				if (!isset($viewableCategories[$searchCategoryId]))
+				{
+					continue;
+				}
+				if ($viewableCategories[$searchCategoryId]['allow_commercial_external'])
+				{
+					$showPriceFilters = true;
+					break;
+				}
+			}
 		}
 
 		$viewParams = array(
@@ -330,33 +357,6 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 			$searchCategoryIds = array($category['resource_category_id']);
 		}
 
-		if (XenForo_Application::getOptions()->resourceShowFilterTabs)
-		{
-			$showFilterTabs = ($childCategories || $category['allow_commercial_external']);
-			if (!$showFilterTabs)
-			{
-				foreach ($searchCategoryIds AS $searchCategoryId)
-				{
-					if (!isset($viewableCategories[$searchCategoryId]))
-					{
-						continue;
-					}
-
-					if ($viewableCategories[$searchCategoryId]['prefix_cache']
-						&& strlen($viewableCategories[$searchCategoryId]['prefix_cache']) > 5 # empty array
-					)
-					{
-						$showFilterTabs = true;
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			$showFilterTabs = false;
-		}
-
 		$criteria['resource_category_id'] = $searchCategoryIds;
 		if ($typeFilter == 'free')
 		{
@@ -410,7 +410,7 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 			$featuredResources = $resourceModel->getFeaturedResourcesInCategories($searchCategoryIds,
 				array_merge(
 					$this->_getResourceListFetchOptions(),
-					array('limit' => 4, 'order' => 'random')
+					array('limit' => 6, 'order' => 'random')
 				)
 			);
 			$featuredResources = $this->_getResourceModel()->filterUnviewableResources($featuredResources);
@@ -465,7 +465,7 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 			'orderDirection' => $orderDirection,
 			'typeFilter' => $typeFilter,
 			'prefixFilter' => $prefixFilter,
-			'showFilterTabs' => $showFilterTabs,
+			'showFilterTabs' => $this->_displayFilterOptions($viewableCategories, $searchCategoryIds),
 
 			'page' => $page,
 			'perPage' => $perPage,
@@ -476,6 +476,33 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 		);
 
 		return $this->responseView('XenResource_ViewPublic_Resource_Category', 'resource_category', $viewParams);
+	}
+
+	protected function _displayFilterOptions(array $viewableCategories, array $searchCategoryIds)
+	{
+		$allowPriceFilter = XenForo_Application::getOptions()->resourceShowFilterTabs;
+
+		foreach ($searchCategoryIds AS $searchCategoryId)
+		{
+			if (!isset($viewableCategories[$searchCategoryId]))
+			{
+				continue;
+			}
+
+			if ($viewableCategories[$searchCategoryId]['prefix_cache']
+				&& strlen($viewableCategories[$searchCategoryId]['prefix_cache']) > 5 # empty array
+			)
+			{
+				return true;
+			}
+
+			if ($allowPriceFilter && $viewableCategories[$searchCategoryId]['allow_commercial_external'])
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	public function actionCategoryFeatured()

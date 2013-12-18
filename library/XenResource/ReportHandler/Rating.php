@@ -42,7 +42,19 @@ class XenResource_ReportHandler_Rating extends XenForo_ReportHandler_Abstract
 		}
 
 		$userId = isset($content['user']['user_id']) ? $content['user']['user_id'] : $content['user_id'];
-		$username = isset($content['user']['username']) ? $content['user']['username'] : $content['username'];
+
+		if (isset($content['user']['username']))
+		{
+			$username = $content['user']['username'];
+		}
+		else if (isset($content['username']))
+		{
+			$username = $content['username'];
+		}
+		else
+		{
+			$username = '';
+		}
 
 		return array(
 			$content['resource_rating_id'],

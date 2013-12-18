@@ -423,8 +423,14 @@ class XenResource_Model_Prefix extends XenForo_Model
 		XenForo_Db::commit($db);
 	}
 
-	public function rebuildPrefixCategoryAssociationCache($categoryIds)
+	public function rebuildPrefixCategoryAssociationCache($categoryIds = null)
 	{
+		if ($categoryIds === null)
+		{
+			$categoryIds = $this->_getDb()->fetchCol('
+				SELECT resource_category_id FROM xf_resource_category
+			');
+		}
 		if (!is_array($categoryIds))
 		{
 			$categoryIds = array($categoryIds);

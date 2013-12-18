@@ -47,7 +47,7 @@ class XenResource_ModerationQueueHandler_Version extends XenForo_ModerationQueue
 
 			$canManage = true;
 			if (!$resourceModel->canViewResourceAndContainer($resource, $category, $null, $viewingUser, $categoryPermissions)
-				|| $versionModel->canDownloadVersion($version, $resource, $category, $null, $viewingUser, $categoryPermissions)
+				|| !$versionModel->canDownloadVersion($version, $resource, $category, $null, $viewingUser, $categoryPermissions)
 			)
 			{
 				$canManage = false;

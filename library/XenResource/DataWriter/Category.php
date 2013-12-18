@@ -167,7 +167,7 @@ class XenResource_DataWriter_Category extends XenForo_DataWriter
 			$this->_getFieldModel()->rebuildFieldCategoryAssociationCache(array($this->get('resource_category_id')));
 		}
 
-		if ($this->isInsert() || $this->isChanged('parent_node_id'))
+		if ($this->isInsert() || $this->isChanged('parent_category_id'))
 		{
 			if ($this->getOption(self::OPTION_REBUILD_CACHE))
 			{

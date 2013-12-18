@@ -1128,6 +1128,11 @@ class XenResource_Model_Resource extends XenForo_Model
 			return false;
 		}
 
+		if (!$this->canDownloadResource($resource, $category, $null, $viewingUser, $categoryPermissions))
+		{
+			return false;
+		}
+
 		return XenForo_Permission::hasContentPermission($categoryPermissions, 'rate');
 	}
 

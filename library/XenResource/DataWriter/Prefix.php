@@ -147,6 +147,7 @@ class XenResource_DataWriter_Prefix extends XenForo_DataWriter
 		$db->update('xf_resource', array('prefix_id' => 0), 'prefix_id = ' . $db->quote($prefixId));
 
 		$this->_getPrefixModel()->rebuildPrefixCache();
+		$this->_getPrefixModel()->rebuildPrefixCategoryAssociationCache();
 	}
 
 	/**

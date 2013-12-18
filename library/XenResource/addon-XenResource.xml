@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.0 Beta 1" version_id="1010031" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
+<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.0 Release Candidate 1" version_id="1010051" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
   <admin_navigation>
     <navigation navigation_id="resourceCategories" parent_navigation_id="resources" display_order="1" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
     <navigation navigation_id="resourceCategoryPerms" parent_navigation_id="permissions" display_order="21" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
@@ -1727,7 +1727,7 @@ step=128</edit_format_params>
     <phrase title="please_provide_review_with_your_rating" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Please provide a review with your rating.]]></phrase>
     <phrase title="please_select_valid_parent_category" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Please select a valid parent category.]]></phrase>
     <phrase title="post_resource_update" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Post Resource Update]]></phrase>
-    <phrase title="prefixes_will_be_disassociated" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Prefixes belonging to this group will disassociated, rather than deleted.]]></phrase>
+    <phrase title="prefixes_will_be_disassociated" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[Prefixes belonging to this group will be disassociated, rather than deleted.]]></phrase>
     <phrase title="prefix_filters" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Prefix Filters]]></phrase>
     <phrase title="prefix_group" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Prefix Group]]></phrase>
     <phrase title="price" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Price]]></phrase>
@@ -2134,10 +2134,10 @@ To disable all emails:
 		'name={xen:helper username, $user, 'subject'}',
 		'title=<a href="{xen:link resources/update, $content, 'update={$content.resource_update_id}'}" class="PopupItemLink">{xen:helper resourcePrefix, $content}{$content.resource_title}: {$content.title}</a>'}
 </xen:if>]]></template>
-    <template title="file_uploader" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:require js="js/xenforo/attachment_editor.js" />
+    <template title="file_uploader" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:require js="js/xenforo/attachment_editor.js" />
 <xen:require css="attachment_editor.css" />
 <xen:require js="js/xenresource/file_uploader.js" />
-<xen:if is="{$xenOptions.swfUpload}">
+<xen:if is="{$xenOptions.swfUpload} AND {$visitor.enable_flash_uploader}">
 	<xen:require js="js/swfupload/swfupload.min.js" />
 </xen:if>
 <xen:require css="file_uploader.css" />
@@ -2741,7 +2741,7 @@ To disable all emails:
 	</xen:include>
 
 </xen:sidebar>]]></template>
-    <template title="resource_category" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{$category.category_title}</xen:title>
+    <template title="resource_category" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:title>{$category.category_title}</xen:title>
 <xen:description class="baseHtml">{xen:raw $category.category_description}</xen:description>
 
 <xen:if is="{$canAddResource}">
@@ -2805,7 +2805,7 @@ To disable all emails:
 	</xen:include>
 
 	<div class="resourceHeaders">
-		<xen:if is="{$xenOptions.resourceShowFilterTabs} AND {$showFilterTabs}">
+		<xen:if is="{$showFilterTabs}">
 			<div class="extraLinks">
 				<div class="Popup filterLink JsOnly">
 					<a rel="Menu">{xen:phrase filters}</a>
@@ -3183,7 +3183,7 @@ To disable all emails:
 	<input type="hidden" name="_xfConfirm" value="1" />
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
-    <template title="resource_description" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title}</xen:title>
+    <template title="resource_description" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title}</xen:title>
 
 <div class="updateContainer section">
 	<ol>
@@ -3192,18 +3192,20 @@ To disable all emails:
 			<xen:set var="$messageBeforeHtml">
 				<xen:include template="resource_field_group">
 					<xen:set var="$fieldGroup" value="above_info" />
+					<xen:set var="$extraFieldClass" value="aboveInfo" />
 				</xen:include>
 			</xen:set>
 			<xen:set var="$messageAfterHtml">
 				<xen:include template="resource_field_group">
 					<xen:set var="$fieldGroup" value="below_info" />
+					<xen:set var="$extraFieldClass" value="belowInfo" />
 				</xen:include>
 			</xen:set>
 		</xen:include>
 	</ol>
 </div>
 
-<xen:if is="{$resource.canRate}">
+<xen:if is="{$resource.canRateIfDownloaded}">
 	<div class="rateBlock">
 		{xen:phrase rate_this_resource}:
 		<xen:include template="rating">
@@ -3309,7 +3311,7 @@ To disable all emails:
 		</xen:if>
 	</form>
 </div>]]></template>
-    <template title="resource_featured_list" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:require css="resource_list.css" />
+    <template title="resource_featured_list" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:require css="resource_list.css" />
 
 <ol class="featuredResourceList">
 <xen:foreach loop="$featuredResources" value="$resource">
@@ -3322,7 +3324,7 @@ To disable all emails:
 			</xen:if>
 		</div>
 		<div class="resourceInfo">
-			<h3 class="title">{xen:helper resourcePrefix, $resource}<a href="{xen:link resources, $resource}">{$resource.title}</a></h3>
+			<h3 class="title"><a href="{xen:link resources, $resource}">{xen:helper resourcePrefix, $resource}{$resource.title}</a></h3>
 			<div class="tagLine muted">{$resource.tag_line}</div>
 			<div class="details muted"><xen:username user="{$resource}" />,
 				<a href="{xen:link resources, $resource}" class="faint"><xen:datetime time="{$resource.resource_date}" /></a>
@@ -3336,9 +3338,9 @@ To disable all emails:
 <blockquote class="ugc baseHtml messageText section">
 	{xen:helper resourceFieldValue, $resource, $fieldId, {$resource.customFields.{$fieldId}}}
 </blockquote>]]></template>
-    <template title="resource_field_group" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:if is="{$category.fieldCache.{$fieldGroup}}">
+    <template title="resource_field_group" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:if is="{$category.fieldCache.{$fieldGroup}}">
 	<xen:if hascontent="true">
-		<div class="customResourceFields">
+		<div class="customResourceFields {$extraFieldClass}">
 		<xen:contentcheck>
 			<xen:foreach loop="{$category.fieldCache.{$fieldGroup}}" value="$fieldId">
 				<xen:if hascontent="true">
@@ -3352,7 +3354,7 @@ To disable all emails:
 		</div>
 	</xen:if>
 </xen:if>]]></template>
-    <template title="resource_filter_menu" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:if is="{$category}">
+    <template title="resource_filter_menu" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:if is="{$category}">
 	<xen:set var="$linkBase" value="resources/categories" />
 	<xen:set var="$linkData" value="{$category}" />
 <xen:else />
@@ -3378,7 +3380,7 @@ To disable all emails:
 		</div>
 
 		<xen:foreach loop="$prefixesGrouped"  key="$prefixGroupId" value="$prefixes">
-			<h4 class="textHeading">{xen:helper resourcePrefixGroup, $prefixGroupId}</h4>
+			<h4 class="textHeading">{xen:if $prefixGroupId, {xen:helper resourcePrefixGroup, $prefixGroupId}, {xen:phrase ungrouped}}</h4>
 			<div class="bubbleLinksList">
 			<xen:foreach loop="$prefixes" value="$prefix">
 				<a href="{xen:link $linkBase, $linkData, '_params={$params}', 'prefix_id={$prefix.prefix_id}'}" class="{xen:if '{$prefixFilter} == {$prefix.prefix_id}', active}">{$prefix.title}</a>
@@ -3535,7 +3537,7 @@ To disable all emails:
 	{xen:property avatar}
 	background-color: transparent;
 }]]></template>
-    <template title="resource_index" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:phrase resources}</xen:title>
+    <template title="resource_index" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:title>{xen:phrase resources}</xen:title>
 
 <xen:container var="$searchBar.resourceUpdate"><xen:include template="search_bar_resource" /></xen:container>
 
@@ -3608,7 +3610,7 @@ To disable all emails:
 	</xen:include>
 
 	<div class="resourceHeaders">
-		<xen:if is="{$xenOptions.resourceShowFilterTabs}">
+		<xen:if is="{$showFilterTabs}">
 			<div class="extraLinks">
 				<div class="Popup filterLink JsOnly">
 					<a rel="Menu">{xen:phrase filters}</a>
@@ -3663,7 +3665,7 @@ To disable all emails:
 </div>
 
 </div>]]></template>
-    <template title="resource_list.css" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[.resourceCategoryTooltip
+    <template title="resource_list.css" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[.resourceCategoryTooltip
 {
 	max-width: 350px;
 }
@@ -3692,7 +3694,7 @@ a.viewAllFeatured
 {
 	overflow: hidden;
 	margin-bottom: 10px;
-	height: 111px;
+	height: 119px;
 }
 
 	.featuredResourceList .featuredResource
@@ -3708,10 +3710,20 @@ a.viewAllFeatured
 		border: 1px solid {xen:property primaryLighter};
 		border-radius: 5px;
 	}
+		
+		.featuredResourceList .featuredResource .prefix
+		{
+			max-width: 100%;
+			box-sizing: border-box;
+			overflow: hidden;
+			word-wrap: normal;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 
 		.featuredResourceList .featuredResource .resourceInfo
 		{
-			height: 96px;
+			height: {xen:calc '96 + {xen:property avatar.padding-top} + {xen:property avatar.padding-bottom} + {xen:property avatar.border-top-width} + {xen:property avatar.border-bottom-width}'}px;
 			padding-left: 5px;
 			overflow: hidden;
 			position: relative;
@@ -3725,11 +3737,13 @@ a.viewAllFeatured
 			.featuredResourceList .featuredResource .resourceImage img
 			{
 				display: block;
-				border: none;
-				border-radius: 0;
-				padding: 0;
-				margin: 0;
-				background: none;
+				width: 96px;
+				height: 96px;
+			}
+			
+			.featuredResourceList .featuredResource .resourceImage .resourceIcon img
+			{
+				{xen:property avatar}
 			}
 
 		.featuredResourceList .featuredResource .title
@@ -4838,7 +4852,7 @@ body .review .commentContent blockquote
 		<xen:set var="$likesUrl">{xen:link resources/update-likes, $resource, 'resource_update_id={$update.resource_update_id}'}</xen:set>
 	</xen:include></xen:if></div>
 </li>]]></template>
-    <template title="resource_update.css" version_id="1000170" version_string="1.0.1"><![CDATA[.resourceUpdate
+    <template title="resource_update.css" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[.resourceUpdate
 {
 	border-bottom: none;
 	border-top: 1px solid {xen:property primaryLighterStill};
@@ -4875,6 +4889,11 @@ body .review .commentContent blockquote
 		{
 			padding: 10px;
 		}
+		
+	.resourceUpdate .likesSummary
+	{
+		{xen:property messageLikesSummary}
+	}
 
 .imageCollection
 {
@@ -5460,7 +5479,7 @@ $(function() {
 });
 </script>
 </xen:if>]]></template>
-    <template title="resource_view.css" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[.innerContent .bbCodeBlock
+    <template title="resource_view.css" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[.innerContent .bbCodeBlock
 {
 	margin-right: 0;
 }
@@ -5488,6 +5507,18 @@ $(function() {
 	.innerContent .customResourceFields
 	{
 	}
+	
+		.innerContent .customResourceFields.aboveInfo
+		{
+			border-bottom: 1px solid {xen:property primaryLighterStill};
+			margin-bottom: 10px;
+		}
+		
+		.innerContent .customResourceFields.belowInfo
+		{
+			border-top: 1px solid {xen:property primaryLighterStill};
+			margin-top: 10px;
+		}
 
 		.innerContent .customResourceFields dl
 		{
@@ -5534,6 +5565,7 @@ $(function() {
 		{
 			display: inline-block;
 			text-align: left;
+			width: 94px;
 		}
 		
 		.innerContent .rateBlock .Hint
