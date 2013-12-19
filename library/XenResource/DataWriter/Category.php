@@ -235,6 +235,7 @@ class XenResource_DataWriter_Category extends XenForo_DataWriter
 		if ($resource->isUpdate() && $resource->isChanged('resource_category_id'))
 		{
 			$this->updateResourceCount(1);
+			$this->updateFeaturedCount();
 
 			$oldCat = XenForo_DataWriter::create('XenResource_DataWriter_Category', XenForo_DataWriter::ERROR_SILENT);
 			if ($oldCat->setExistingData($resource->getExisting('resource_category_id')))

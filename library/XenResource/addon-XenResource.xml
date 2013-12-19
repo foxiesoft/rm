@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.0" version_id="1010070" url="http://xenforo.com" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
+<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.1" version_id="1010170" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
   <admin_navigation>
     <navigation navigation_id="resourceCategories" parent_navigation_id="resources" display_order="1" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
     <navigation navigation_id="resourceCategoryPerms" parent_navigation_id="permissions" display_order="21" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
@@ -5161,7 +5161,7 @@ body .review .commentContent blockquote
 
 	<a href="{xen:link resources/updates, $resource}">{xen:phrase return_to_update_list}...</a>
 </div>]]></template>
-    <template title="resource_version_add" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:phrase post_resource_update}</xen:title>
+    <template title="resource_version_add" version_id="1010170" version_string="1.1.1"><![CDATA[<xen:title>{xen:phrase post_resource_update}</xen:title>
 
 <xen:navigation>
 	<xen:breadcrumb source="$categoryBreadcrumbs" />
@@ -5245,6 +5245,7 @@ body .review .commentContent blockquote
 			<input type="submit" value="{xen:phrase save_update}" accesskey="s" class="button primary" />
 			<xen:include template="attachment_upload_button">
 				<xen:set var="$buttonText">{xen:phrase upload_images}...</xen:set>
+				<xen:set var="$attachmentButtonKey">image</xen:set>
 			</xen:include>
 			<input type="button" value="{xen:phrase preview}..." class="button PreviewButton JsOnly" />
 		</dd>
@@ -5272,7 +5273,7 @@ body .review .commentContent blockquote
 	<input type="hidden" name="_xfConfirm" value="1" />
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
-    <template title="resource_view" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:h1><xen:comment>(empty)</xen:comment></xen:h1>
+    <template title="resource_view" version_id="1010170" version_string="1.1.1"><![CDATA[<xen:h1><xen:comment>(empty)</xen:comment></xen:h1>
 
 <xen:description>{$resource.tag_line}</xen:description>
 
@@ -5375,7 +5376,7 @@ body .review .commentContent blockquote
 					<xen:include template="rating">
 						<xen:set var="$action">{xen:if $resource.canRateIfDownloaded, {xen:link resources/rate, $resource}}</xen:set>
 						<xen:set var="$rating">{$resource.version_rating}</xen:set>
-						<xen:set var="$prompt">{xen:if $resource.canRateIfDownloaded, {xen:phrase rate_this_resource}, '{xen:phrase version_rating}'}:</xen:set>
+						<xen:set var="$prompt">{xen:phrase version_rating}:</xen:set>
 						<xen:set var="$hint">{xen:if '{$resource.version_rating_count} == 1', {xen:phrase 1_vote}, {xen:phrase x_votes_plural, 'count={$resource.version_rating_count}'}}</xen:set>
 					</xen:include>
 		

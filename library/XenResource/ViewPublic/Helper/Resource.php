@@ -62,6 +62,7 @@ class XenResource_ViewPublic_Helper_Resource
 				$choice = $value;
 				$value = new XenForo_Phrase("resource_field_$field[field_id]_choice_$value");
 				$value->setPhraseNameOnInvalid(false);
+				$valueRaw = $value;
 				break;
 
 			case 'checkbox':
@@ -81,9 +82,12 @@ class XenResource_ViewPublic_Helper_Resource
 					$newValues[$choice] = $phrase;
 				}
 				$value = $newValues;
+				$valueRaw = $value;
 				break;
 
 			case 'bbcode':
+				$valueRaw = htmlspecialchars(XenForo_Helper_String::censorString($value));
+
 				$bbCodeParser = new XenForo_BbCode_Parser(XenForo_BbCode_Formatter_Base::create('Base', array('view' => $view)));
 				$value = $bbCodeParser->render($value, array(
 					'noFollowDefault' => empty($resource['isTrusted'])
@@ -93,6 +97,7 @@ class XenResource_ViewPublic_Helper_Resource
 			case 'textbox':
 			case 'textarea':
 			default:
+				$valueRaw = htmlspecialchars(XenForo_Helper_String::censorString($value));
 				$value = XenForo_Template_Helper_Core::callHelper('bodytext', array($value));
 		}
 
@@ -105,6 +110,7 @@ class XenResource_ViewPublic_Helper_Resource
 					$thisValue = strtr($field['display_template'], array(
 						'{$fieldId}' => $field['field_id'],
 						'{$value}' => $thisValue,
+						'{$valueRaw}' => $thisValue,
 						'{$valueUrl}' => urlencode($thisValue),
 						'{$choice}' => $choice,
 					));
@@ -115,6 +121,7 @@ class XenResource_ViewPublic_Helper_Resource
 				$value = strtr($field['display_template'], array(
 					'{$fieldId}' => $field['field_id'],
 					'{$value}' => $value,
+					'{$valueRaw}' => $valueRaw,
 					'{$valueUrl}' => urlencode($value),
 					'{$choice}' => $choice,
 				));

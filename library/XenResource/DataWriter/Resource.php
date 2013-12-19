@@ -639,16 +639,25 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 		$this->getModelFromCache('XenForo_Model_Attachment')->deleteAttachmentsFromContentIds(
 			'resource_update', $updateIds
 		);
+		$this->getModelFromCache('XenForo_Model_Alert')->deleteAlerts(
+			'resource_update', $updateIds
+		);
+
+		$ratingIds = $this->_db->fetchCol('
+			SELECT resource_rating_id
+			FROM xf_resource_rating
+			WHERE resource_id = ?
+		', $this->get('resource_id'));
+		$this->getModelFromCache('XenForo_Model_Alert')->deleteAlerts(
+			'resource_rating', $ratingIds
+		);
 
 		$idQuoted = $this->_db->quote($this->get('resource_id'));
 		$this->_db->delete('xf_resource_update', 'resource_id = ' . $idQuoted);
 		$this->_db->delete('xf_resource_version', 'resource_id = ' . $idQuoted);
 		$this->_db->delete('xf_resource_watch', 'resource_id = ' . $idQuoted);
 		$this->_db->delete('xf_resource_feature', 'resource_id = ' . $idQuoted);
-		if ($versionIds)
-		{
-			$this->_db->delete('xf_resource_rating', 'resource_version_id IN (' . $this->_db->quote($versionIds) . ')');
-		}
+		$this->_db->delete('xf_resource_rating', 'resource_id = ' . $idQuoted);
 
 		$indexer = new XenForo_Search_Indexer();
 		$indexer->deleteFromIndex('resource_update', $updateIds);
