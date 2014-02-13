@@ -286,6 +286,13 @@ class XenResource_Search_DataHandler_Update extends XenForo_Search_DataHandler_A
 	 */
 	public function getSearchFormControllerResponse(XenForo_ControllerPublic_Abstract $controller, XenForo_Input $input, array $viewParams)
 	{
+		/** @var $resourceModel XenResource_Model_Resource */
+		$resourceModel = XenForo_Model::create('XenResource_Model_Resource');
+		if (!$resourceModel->canViewResources($error))
+		{
+			return $controller->responseNoPermission();
+		}
+
 		$params = $input->filterSingle('c', XenForo_Input::ARRAY_SIMPLE);
 
 		if (!empty($params['rescat']))

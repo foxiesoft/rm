@@ -778,11 +778,6 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 	{
 		$categoryModel = $this->_getCategoryModel();
 
-		if (!$categoryModel->canAddResource(null, $key))
-		{
-			throw $this->getErrorOrNoPermissionResponseException($key);
-		}
-
 		$categoryId = $this->_input->filterSingle('resource_category_id', XenForo_Input::UINT);
 		if ($categoryId)
 		{
@@ -799,6 +794,11 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 
 		if (!$category)
 		{
+			if (!$categoryModel->canAddResource(null, $key))
+			{
+				throw $this->getErrorOrNoPermissionResponseException($key);
+			}
+
 			$categories = $categoryModel->prepareCategories($categoryModel->getViewableCategories());
 			return $this->responseView('XenResource_ViewPublic_Resource_ChooseCategory', 'resource_choose_category', array(
 				'categories' =>$categories

@@ -41,9 +41,9 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 	/**
 	 * The custom fields to be updated. Use setCustomFields to manage this.
 	 *
-	 * @var array
+	 * @var array|null
 	 */
-	protected $_updateCustomFields = array();
+	protected $_updateCustomFields = null;
 
 	/**
 	* Gets the fields that are defined for the table. See parent for explanation.

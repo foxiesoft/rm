@@ -322,7 +322,7 @@ class XenResource_Model_Prefix extends XenForo_Model
 		", $viewingUser['permission_combination_id']);
 		while ($result = $results->fetch())
 		{
-			if (isset($prefixes[$result['resource_category_id']]))
+			if (isset($prefixes[$result['prefix_id']]))
 			{
 				continue;
 			}

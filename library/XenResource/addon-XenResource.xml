@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.1" version_id="1010170" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
+<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.2" version_id="1010270" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
   <admin_navigation>
     <navigation navigation_id="resourceCategories" parent_navigation_id="resources" display_order="1" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
     <navigation navigation_id="resourceCategoryPerms" parent_navigation_id="permissions" display_order="21" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
@@ -1769,9 +1769,9 @@ step=128</edit_format_params>
     <phrase title="resource_featured" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[Resource Featured]]></phrase>
     <phrase title="resource_file" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Resource File]]></phrase>
     <phrase title="resource_likes" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Resource Likes]]></phrase>
-    <phrase title="resource_message_create_resource" version_id="1000170" version_string="1.0.1"><![CDATA[{username} submitted a new resource:
+    <phrase title="resource_message_create_resource" version_id="1010270" version_string="1.1.2"><![CDATA[{username} submitted a new resource:
 
-[url={resourceLink}]{title}[/url] - {tagLine}
+[url={resourceLink}][plain]{title}[/plain][/url] - [plain]{tagLine}[/plain]
 
 [quote]{snippet}[/quote]
 
@@ -3665,7 +3665,7 @@ To disable all emails:
 </div>
 
 </div>]]></template>
-    <template title="resource_list.css" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[.resourceCategoryTooltip
+    <template title="resource_list.css" version_id="1010270" version_string="1.1.2"><![CDATA[.resourceCategoryTooltip
 {
 	max-width: 350px;
 }
@@ -3719,6 +3719,7 @@ a.viewAllFeatured
 			word-wrap: normal;
 			white-space: nowrap;
 			text-overflow: ellipsis;
+			vertical-align: bottom;
 		}
 
 		.featuredResourceList .featuredResource .resourceInfo
@@ -6087,7 +6088,7 @@ $(function() {
 <ul>
 	<li><label><input type="checkbox" name="type[resource_update][is_resource]" value="1" /> {xen:phrase search_only_resource_descriptions}</label>
 </ul>]]></template>
-    <template title="search_form_resource_update" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:phrase search_resources}</xen:title>
+    <template title="search_form_resource_update" version_id="1010270" version_string="1.1.2"><![CDATA[<xen:title>{xen:phrase search_resources}</xen:title>
 
 <xen:navigation>
 	<xen:breadcrumb href="{xen:link full:search}">{xen:phrase search}</xen:breadcrumb>
@@ -6188,8 +6189,8 @@ $(function() {
 			<dt><label>{xen:phrase order_by}:</label></dt>
 			<dd>
 				<ul>
-					<li><label for="ctrl_order_date"><input type="radio" name="order" id="ctrl_order_date" value="date" checked="checked" /> {xen:phrase most_recent}</label></li>
-					<li><label for="ctrl_order_relevance"><input type="radio" name="order" id="ctrl_order_relevance" value="relevance" /> {xen:phrase relevance}</label></li>
+					<li><label for="ctrl_order_date"><input type="radio" name="order" id="ctrl_order_date" value="date" {xen:checked '{$search.order} == "date"'} /> {xen:phrase most_recent}</label></li>
+					<li><label for="ctrl_order_relevance"><input type="radio" name="order" id="ctrl_order_relevance" value="relevance" {xen:checked '{$search.order} == "relevance"'} /> {xen:phrase relevance}</label></li>
 				</ul>
 			</dd>
 		</dl>
@@ -6234,7 +6235,7 @@ $(function() {
 		</div>
 	</div>
 </li>]]></template>
-    <template title="search_result_resource_update.css" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[.resourceUpdate .cost
+    <template title="search_result_resource_update.css" version_id="1010270" version_string="1.1.2"><![CDATA[.resourceUpdate .cost
 {
 	font-size: 9px;
 	color: {xen:property primaryLightish};
@@ -6242,6 +6243,7 @@ $(function() {
 	border: 1px solid {xen:property primaryLighter};
 	border-radius: 3px;
 	padding: 0 1px;
+	vertical-align: top;
 }]]></template>
   </templates>
   <public_template_modifications>
