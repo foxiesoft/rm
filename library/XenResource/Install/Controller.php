@@ -229,7 +229,6 @@ class XenResource_Install_Controller
 		XenForo_Db::beginTransaction($db);
 
 		$contentTypeTables = array(
-			'xf_attachment',
 			'xf_content_type',
 			'xf_content_type_field',
 			'xf_deletion_log',
@@ -244,6 +243,9 @@ class XenResource_Install_Controller
 		{
 			$db->delete($table, 'content_type IN (' . $contentTypesQuoted . ')');
 		}
+
+		// let these be cleaned up over time
+		$db->update('xf_attachment', array('unassociated' => 1), 'content_type IN (' . $contentTypesQuoted . ')');
 
 		$db->delete('xf_admin_permission_entry', "admin_permission_id = 'resourceManager'");
 		$db->delete('xf_permission_cache_content', "content_type = 'resource_category'");

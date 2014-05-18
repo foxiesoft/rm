@@ -208,7 +208,11 @@ class XenResource_ControllerAdmin_Category extends XenForo_ControllerAdmin_Abstr
 			);
 		}
 
-		$resources = $this->_getResourceModel()->getResources(array('resource_category_id' => $id), array('limit' => 100));
+		$resources = $this->_getResourceModel()->getResources(array(
+			'resource_category_id' => $id,
+			'deleted' => true,
+			'moderated' => true
+		), array('limit' => 100));
 		if (!$resources)
 		{
 			return $this->responseRedirect(

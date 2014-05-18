@@ -1227,7 +1227,7 @@ class XenResource_Model_Resource extends XenForo_Model
 	{
 		if (!$resourceId)
 		{
-			throw new XenForo_Exception('Missing user ID.');
+			throw new XenForo_Exception('Missing resource ID.');
 		}
 
 		if (!$upload->isValid())

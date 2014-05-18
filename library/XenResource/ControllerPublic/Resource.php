@@ -106,6 +106,7 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 		}
 
 		$this->canonicalizePageNumber($page, $perPage, $totalResources, 'resources');
+		$this->canonicalizeRequestUrl(XenForo_Link::buildPublicLink('resources', null, array('page' => $page)));
 
 		$resources = $resourceModel->getResources($criteria,
 			array_merge(
@@ -257,7 +258,7 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 		if ($prefixesGrouped)
 		{
 			$visiblePrefixes = $prefixModel->getVisiblePrefixIds(null, $searchCategoryIds);
-			foreach ($prefixesGrouped AS $key => $prefixes)
+			foreach ($prefixesGrouped AS $key => &$prefixes)
 			{
 				foreach ($prefixes AS $prefixId => $prefix)
 				{
@@ -2273,29 +2274,36 @@ class XenResource_ControllerPublic_Resource extends XenForo_ControllerPublic_Abs
 		$updates = $updateModel->getAndMergeAttachmentsIntoUpdates($updates);
 		$update = $updates[$updateId];
 
+		$isLimited = false;
+
 		$options = XenForo_Application::getOptions();
 		if ($resource['is_fileless']
+			&& !$resource['external_purchase_url']
 			&& $options->get('resourceFilelessViewFull', 'limit')
 			&& !$resourceModel->canDownloadResource($resource, $category)
 		)
 		{
-			$limit = $options->get('resourceFilelessViewFull', 'length');
+			$limit = max(500, $options->get('resourceFilelessViewFull', 'length'));
 			if ($limit > 0) {
 				$trimmed = XenForo_Helper_String::wholeWordTrim($update['message'], $limit);
 				$isLimited = strlen($trimmed) < strlen($update['message']);
 			} else {
+				$trimmed = '';
 				$isLimited = true;
 			}
 			if ($isLimited)
 			{
-				return $this->responseNoPermission();
+				$parser = XenForo_BbCode_Parser::create(XenForo_BbCode_Formatter_Base::create('XenForo_BbCode_Formatter_BbCode_AutoLink', false));
+				$update['message'] = $parser->render($trimmed);
+				$update['isMessageTrimmed'] = true;
 			}
 		}
 
 		$viewParams = array(
 			'resource' => $resource,
 			'category' => $category,
-			'update' => $updates[$updateId],
+			'update' => $update,
+			'isLimited' => $isLimited,
 			'canViewImages' => $updateModel->canViewUpdateImages($resource, $category)
 		);
 

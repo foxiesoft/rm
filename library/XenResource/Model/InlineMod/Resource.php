@@ -99,7 +99,7 @@ class XenResource_Model_InlineMod_Resource extends XenForo_Model
 			}
 			else
 			{
-				$dw->setExtraData(XenForo_DataWriter_DiscussionMessage::DATA_DELETE_REASON, $options['reason']);
+				$dw->setExtraData(XenResource_DataWriter_Resource::DATA_DELETE_REASON, $options['reason']);
 				$dw->set('resource_state', 'deleted');
 				$dw->save();
 			}

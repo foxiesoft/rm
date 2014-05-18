@@ -11,6 +11,8 @@ class XenResource_ViewPublic_Update_ViewAjax extends XenForo_ViewPublic_Base
 			)
 		);
 
+		$this->_params['showLimitedNotice'] = $this->_params['isLimited'];
+
 		$this->_params['update']['messageHtml'] = XenForo_ViewPublic_Helper_Message::getBbCodeWrapper(
 			$this->_params['update'], $bbCodeParser, $bbCodeOptions
 		);

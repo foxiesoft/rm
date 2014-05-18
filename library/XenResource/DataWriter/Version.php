@@ -271,6 +271,9 @@ class XenResource_DataWriter_Version extends XenForo_DataWriter
 		$this->getModelFromCache('XenForo_Model_ModerationQueue')->deleteFromModerationQueue(
 			'resource_version', $this->get('resource_version_id')
 		);
+
+		$idQuoted = $this->_db->quote($this->get('resource_id'));
+		$this->_db->delete('xf_resource_download', 'resource_version_id = ' . $idQuoted);
 	}
 
 	/**

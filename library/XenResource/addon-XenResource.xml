@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.2" version_id="1010270" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
+<addon addon_id="XenResource" title="XenForo Resource Manager" version_string="1.1.3" version_id="1010370" url="http://xenforo.com/" install_callback_class="XenResource_Install_Controller" install_callback_method="install" uninstall_callback_class="XenResource_Install_Controller" uninstall_callback_method="uninstall">
   <admin_navigation>
     <navigation navigation_id="resourceCategories" parent_navigation_id="resources" display_order="1" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
     <navigation navigation_id="resourceCategoryPerms" parent_navigation_id="permissions" display_order="21" link="resource-categories" admin_permission_id="resourceManager" debug_only="0" hide_no_children="0"/>
@@ -1813,7 +1813,7 @@ step=128</edit_format_params>
     <phrase title="search_resources" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Search Resources]]></phrase>
     <phrase title="search_resources_only" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Search resources only]]></phrase>
     <phrase title="search_this_category_only" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Search this category only]]></phrase>
-    <phrase title="selected_resources" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Selected resources]]></phrase>
+    <phrase title="selected_resources" version_id="1010370" version_string="1.1.3"><![CDATA[Selected Resources]]></phrase>
     <phrase title="select_category_that_best_describes_your_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Select the category that best describes your resource.]]></phrase>
     <phrase title="select_deselect_all_resources_on_this_page" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Select / deselect all resources on this page]]></phrase>
     <phrase title="select_resource" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Select resource]]></phrase>
@@ -2741,7 +2741,7 @@ To disable all emails:
 	</xen:include>
 
 </xen:sidebar>]]></template>
-    <template title="resource_category" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:title>{$category.category_title}</xen:title>
+    <template title="resource_category" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:title>{$category.category_title}</xen:title>
 <xen:description class="baseHtml">{xen:raw $category.category_description}</xen:description>
 
 <xen:if is="{$canAddResource}">
@@ -2753,6 +2753,8 @@ To disable all emails:
 </xen:navigation>
 
 <xen:container var="$searchBar.resourceUpdate"><xen:include template="search_bar_resource" /></xen:container>
+<xen:container var="$head.canonical">
+	<link rel="canonical" href="{xen:link 'canonical:resources/categories', $category, "page={xen:if '{$page} > 1', $page, ''}"}" /></xen:container>
 
 <xen:require css="resource_list.css" />
 
@@ -3045,14 +3047,14 @@ To disable all emails:
 	</xen:if>
 </xen:foreach>
 </ol>]]></template>
-    <template title="resource_category_watch" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:if is="{$watch}">
+    <template title="resource_category_watch" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:if is="{$watch}">
 	<xen:title>{xen:phrase unwatch_category} - {$category.category_title}</xen:title>
 <xen:else />
 	<xen:title>{xen:phrase watch_category} - {$category.category_title}</xen:title>
 </xen:if>
 
 <xen:navigation>
-	<xen:breadcrumb source="$categoryBreadCrumbs" />
+	<xen:breadcrumb source="$categoryBreadcrumbs" />
 </xen:navigation>
 
 <xen:container var="$searchBar.resourceUpdate"><xen:include template="search_bar_resource" /></xen:container>
@@ -3183,7 +3185,10 @@ To disable all emails:
 	<input type="hidden" name="_xfConfirm" value="1" />
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
-    <template title="resource_description" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title}</xen:title>
+    <template title="resource_description" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title}</xen:title>
+
+<xen:container var="$head.canonical">
+	<link rel="canonical" href="{xen:link 'canonical:resources', $resource}" /></xen:container>
 
 <div class="updateContainer section">
 	<ol>
@@ -3411,9 +3416,12 @@ To disable all emails:
 		</dl>
 	</div>
 </xen:if>]]></template>
-    <template title="resource_history" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {xen:phrase version_history}</xen:title>
+    <template title="resource_history" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {xen:phrase version_history}</xen:title>
 
 <xen:require css="resource_view.css" />
+
+<xen:container var="$head.canonical">
+	<link rel="canonical" href="{xen:link 'canonical:resources/history', $resource}" /></xen:container>
 
 <table class="dataTable resourceHistory">
 <tr class="dataRow">
@@ -3537,9 +3545,11 @@ To disable all emails:
 	{xen:property avatar}
 	background-color: transparent;
 }]]></template>
-    <template title="resource_index" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[<xen:title>{xen:phrase resources}</xen:title>
+    <template title="resource_index" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:title>{xen:phrase resources}</xen:title>
 
 <xen:container var="$searchBar.resourceUpdate"><xen:include template="search_bar_resource" /></xen:container>
+<xen:container var="$head.canonical">
+	<link rel="canonical" href="{xen:link 'canonical:resources', '', "page={xen:if '{$page} > 1', $page, ''}"}" /></xen:container>
 
 <xen:require css="resource_list.css" />
 
@@ -3665,7 +3675,7 @@ To disable all emails:
 </div>
 
 </div>]]></template>
-    <template title="resource_list.css" version_id="1010270" version_string="1.1.2"><![CDATA[.resourceCategoryTooltip
+    <template title="resource_list.css" version_id="1010370" version_string="1.1.3"><![CDATA[.resourceCategoryTooltip
 {
 	max-width: 350px;
 }
@@ -3948,7 +3958,6 @@ a.viewAllFeatured
 	display: table;
 	table-layout: fixed;
 	width: 100%;
-	word-wrap: normal;
 
 	{xen:property primaryContent.background}
 
@@ -4330,12 +4339,12 @@ a.viewAllFeatured
 </li>
 
 <xen:require css="resource_list.css" />]]></template>
-    <template title="resource_list_mini" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:require css="resource_list_mini.css" />
+    <template title="resource_list_mini" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:require css="resource_list_mini.css" />
 <ol>
 <xen:foreach loop="$resources" value="$resource">
 	<li class="{$resource.resource_state}">
 		<a href="{xen:link resources, $resource}" class="resourceTitle">{xen:helper resourcePrefix, $resource}{$resource.title}</a>
-		<xen:username user="$resource" rich="true" class="username" />
+		<xen:username user="$resource" rich="true" />
 		<div class="tagLine">{$resource.tag_line}</div>
 	</li>
 </xen:foreach>
@@ -4613,7 +4622,10 @@ body .review .commentContent blockquote
 {
 	display: none
 }]]></template>
-    <template title="resource_reviews" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {xen:phrase reviews}</xen:title>
+    <template title="resource_reviews" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {xen:phrase reviews}</xen:title>
+
+<xen:container var="$head.canonical">
+	<link rel="canonical" href="{xen:link 'canonical:resources/reviews', $resource, "page={xen:if '{$page} > 1', $page, ''}"}" /></xen:container>
 
 <ol class="reviews">
 <xen:foreach loop="$reviews" value="$review">
@@ -4932,7 +4944,10 @@ body .review .commentContent blockquote
 		{
 			vertical-align: middle;
 		}]]></template>
-    <template title="resource_updates" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {xen:phrase updates}</xen:title>
+    <template title="resource_updates" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {xen:phrase updates}</xen:title>
+
+<xen:container var="$head.canonical">
+	<link rel="canonical" href="{xen:link 'canonical:resources/updates', $resource, "page={xen:if '{$page} > 1', $page, ''}"}" /></xen:container>
 
 <div class="updateContainer">
 	<ol>
@@ -5153,11 +5168,13 @@ body .review .commentContent blockquote
 	<input type="hidden" name="_xfConfirm" value="1" />
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
-    <template title="resource_update_view" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {$update.title}</xen:title>
+    <template title="resource_update_view" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:title>{xen:helper resourcePrefix, $resource, escaped}{$resource.title} - {$update.title}</xen:title>
 
 <div class="updateContainer">
 	<ol>
-		<xen:include template="resource_update" />
+		<xen:include template="resource_update">
+			<xen:set var="$showLimitedNotice">{xen:if $isLimited, 1}</xen:set>
+		</xen:include>
 	</ol>
 
 	<a href="{xen:link resources/updates, $resource}">{xen:phrase return_to_update_list}...</a>
@@ -5274,7 +5291,7 @@ body .review .commentContent blockquote
 	<input type="hidden" name="_xfConfirm" value="1" />
 	<input type="hidden" name="_xfToken" value="{$visitor.csrf_token_page}" />
 </form>]]></template>
-    <template title="resource_view" version_id="1010170" version_string="1.1.1"><![CDATA[<xen:h1><xen:comment>(empty)</xen:comment></xen:h1>
+    <template title="resource_view" version_id="1010370" version_string="1.1.3"><![CDATA[<xen:h1><xen:comment>(empty)</xen:comment></xen:h1>
 
 <xen:description>{$resource.tag_line}</xen:description>
 
@@ -5308,7 +5325,7 @@ body .review .commentContent blockquote
 
 	<xen:hook name="resource_view_sidebar_start" params="{xen:array 'resource={$resource}'}" />
 	
-	<div class="section statsList" id="resourceInfo" itemscope="itemscope" itemtype="http://data-vocabulary.org/Review-aggregate">
+	<div class="section statsList" id="resourceInfo"{xen:if $resource.rating_count, ' itemscope="itemscope" itemtype="http://data-vocabulary.org/Review-aggregate"'}>
 		<div class="secondaryContent">
 		<xen:hook name="resource_view_sidebar_resource_info">
 			<xen:if is="{$resource.feature_date}">
@@ -5344,7 +5361,7 @@ body .review .commentContent blockquote
 					<xen:set var="$rating">{$resource.rating_avg}</xen:set>
 					<xen:set var="$prompt">{xen:phrase all_time_rating}:</xen:set>
 					<xen:set var="$hint">{xen:if '{$resource.rating_count} == 1', {xen:phrase 1_vote}, {xen:phrase x_votes_plural, 'count={$resource.rating_count}'}}</xen:set>
-					<xen:set var="$microdata">1</xen:set>
+					<xen:set var="$microdata">{xen:if $resource.rating_count, 1, 0}</xen:set>
 				</xen:include>
 			</div>
 
@@ -6235,7 +6252,7 @@ $(function() {
 		</div>
 	</div>
 </li>]]></template>
-    <template title="search_result_resource_update.css" version_id="1010270" version_string="1.1.2"><![CDATA[.resourceUpdate .cost
+    <template title="search_result_resource_update.css" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[.resourceUpdate .cost
 {
 	font-size: 9px;
 	color: {xen:property primaryLightish};
@@ -6243,7 +6260,6 @@ $(function() {
 	border: 1px solid {xen:property primaryLighter};
 	border-radius: 3px;
 	padding: 0 1px;
-	vertical-align: top;
 }]]></template>
   </templates>
   <public_template_modifications>
@@ -6327,4 +6343,5 @@ $2]]></replace>
     </modification>
   </public_template_modifications>
   <bb_code_media_sites/>
+  <bb_codes/>
 </addon>

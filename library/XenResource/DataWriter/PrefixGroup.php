@@ -105,7 +105,7 @@ class XenResource_DataWriter_PrefixGroup extends XenForo_DataWriter
 	/**
 	 * Gets the name of the title phrase for this prefix.
 	 *
-	 * @param integer $prefixId
+	 * @param integer $prefixGroupId
 	 *
 	 * @return string
 	 */

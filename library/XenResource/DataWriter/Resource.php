@@ -82,7 +82,7 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 				'external_purchase_url'=> array('type' => self::TYPE_STRING, 'default' => '', 'maxLength' => 500,
 					'verification' => array('XenForo_DataWriter_Helper_Uri', 'verifyUriOrEmpty')
 				),
-				'price'                => array('type' => self::TYPE_FLOAT, 'default' => 0),
+				'price'                => array('type' => self::TYPE_FLOAT, 'default' => 0, 'max' => 99999999, 'min' => 0),
 				'currency'             => array('type' => self::TYPE_STRING,  'default' => ''),
 				'download_count'       => array('type' => self::TYPE_UINT_FORCED, 'default' => 0),
 				'rating_count'         => array('type' => self::TYPE_UINT_FORCED, 'default' => 0),
@@ -424,8 +424,19 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 			$threadDw = XenForo_DataWriter::create('XenForo_DataWriter_Discussion_Thread', XenForo_DataWriter::ERROR_SILENT);
 			if ($threadDw->setExistingData($this->get('discussion_thread_id')) && $threadDw->get('discussion_type') == 'resource')
 			{
-				$threadDw->set('node_id', $nodeId);
-				$threadDw->set('prefix_id', $prefixId);
+				if ($nodeId)
+				{
+					$threadDw->set('node_id', $nodeId);
+					$threadDw->set('prefix_id', $prefixId);
+					if ($threadDw->get('discussion_state') == 'deleted')
+					{
+						$threadDw->set('discussion_state', 'visible');
+					}
+				}
+				else
+				{
+					$threadDw->set('discussion_state', 'deleted');
+				}
 				$threadDw->save();
 			}
 		}
@@ -630,6 +641,10 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 		$this->getModelFromCache('XenForo_Model_Attachment')->deleteAttachmentsFromContentIds(
 			'resource_version', $versionIds
 		);
+		if ($versionIds)
+		{
+			$this->_db->delete('xf_resource_download', 'resource_version_id IN (' . $this->_db->quote($versionIds) . ')');
+		}
 
 		$updateIds = $this->_db->fetchCol('
 			SELECT resource_update_id
@@ -653,11 +668,12 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 		);
 
 		$idQuoted = $this->_db->quote($this->get('resource_id'));
+		$this->_db->delete('xf_resource_feature', 'resource_id = ' . $idQuoted);
+		$this->_db->delete('xf_resource_field_value', 'resource_id = ' . $idQuoted);
+		$this->_db->delete('xf_resource_rating', 'resource_id = ' . $idQuoted);
 		$this->_db->delete('xf_resource_update', 'resource_id = ' . $idQuoted);
 		$this->_db->delete('xf_resource_version', 'resource_id = ' . $idQuoted);
 		$this->_db->delete('xf_resource_watch', 'resource_id = ' . $idQuoted);
-		$this->_db->delete('xf_resource_feature', 'resource_id = ' . $idQuoted);
-		$this->_db->delete('xf_resource_rating', 'resource_id = ' . $idQuoted);
 
 		$indexer = new XenForo_Search_Indexer();
 		$indexer->deleteFromIndex('resource_update', $updateIds);
@@ -696,6 +712,8 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 				$this->getOption(self::OPTION_DELETE_THREAD_TITLE_TEMPLATE)
 			);
 		}
+
+		$title = XenForo_Helper_String::wholeWordTrim($title, 100);
 
 		return $title;
 	}
@@ -754,6 +772,7 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 		$postWriter = $threadDw->getFirstMessageDw();
 		$postWriter->set('message', $message->render());
 		$postWriter->setExtraData(XenForo_DataWriter_DiscussionMessage_Post::DATA_FORUM, $forum);
+		$postWriter->setOption(XenForo_DataWriter_DiscussionMessage::OPTION_IS_AUTOMATED, true);
 		$postWriter->setOption(XenForo_DataWriter_DiscussionMessage::OPTION_PUBLISH_FEED, false);
 
 		if (!$threadDw->save())
@@ -836,6 +855,7 @@ class XenResource_DataWriter_Resource extends XenForo_DataWriter
 					), false);
 
 					$writer = XenForo_DataWriter::create('XenForo_DataWriter_DiscussionMessage_Post');
+					$writer->setOption(XenForo_DataWriter_DiscussionMessage::OPTION_IS_AUTOMATED, true);
 					$writer->bulkSet(array(
 						'user_id' => $this->get('user_id'),
 						'username' => $this->get('username'),

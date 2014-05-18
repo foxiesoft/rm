@@ -14,7 +14,8 @@ class XenResource_Listener_Proxy_ControllerMember extends XFCP_XenResource_Liste
 			$userModel = $this->_getUserModel();
 
 			$notableCriteria = array(
-				'is_banned' => 0
+				'is_banned' => 0,
+				'resource_count' => array('>', 0)
 			);
 			return array($userModel->getUsers($notableCriteria, array(
 				'join' => XenForo_Model_User::FETCH_USER_FULL,

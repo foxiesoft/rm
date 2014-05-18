@@ -282,6 +282,7 @@ class XenResource_DataWriter_Update extends XenForo_DataWriter
 		));
 		$writer->set('message', $message->render());
 		$writer->set('message_state', $this->getModelFromCache('XenForo_Model_Post')->getPostInsertMessageState($thread, $forum));
+		$writer->setOption(XenForo_DataWriter_DiscussionMessage::OPTION_IS_AUTOMATED, true);
 		$writer->setOption(XenForo_DataWriter_DiscussionMessage::OPTION_PUBLISH_FEED, false);
 		$writer->save();
 

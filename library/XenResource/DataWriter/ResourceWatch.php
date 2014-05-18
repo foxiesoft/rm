@@ -47,7 +47,7 @@ class XenResource_DataWriter_ResourceWatch extends XenForo_DataWriter
 			return false;
 		}
 
-		return array('xf_resource_watch' => $this->_getResourceWatchModel()->getUserResourceWatchByThreadId($userId, $threadId));
+		return array('xf_resource_watch' => $this->_getResourceWatchModel()->getUserResourceWatchByResourceId($userId, $threadId));
 	}
 
 	/**
